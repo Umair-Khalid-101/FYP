@@ -6,16 +6,13 @@ const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const user = require("./routes/user-routes");
+app.use(cors({ credentials: true, origin: "http://localhost:3000" }));
+app.use(cookieParser());
+app.use(express.json());
 
 mongoose.connect(process.env.DATABASE_ACCESS, () =>
   console.log("Database Connected")
 );
-
-app.use(cookieParser());
-
-app.use(express.json());
-
-app.use(cors());
 
 app.use("/funderr", user);
 

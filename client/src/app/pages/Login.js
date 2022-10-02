@@ -26,11 +26,9 @@ const Login = () => {
       password: "",
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      alert(JSON.stringify(values, null, 2));
-      console.log("Values: ", values);
-      axios
-        .post("http://localhost:3001/funderr/Login", values)
+    onSubmit: async (values) => {
+      await axios
+        .post("http://localhost:3001/funderr/login", values)
         .then((response) => console.log(response.data));
       history("/home");
     },
