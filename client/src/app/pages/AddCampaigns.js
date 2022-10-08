@@ -4,7 +4,7 @@ import * as yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const validationSchema = yup.object({
   title: yup.string("Enter a title").required("Title is required"),
@@ -12,13 +12,13 @@ const validationSchema = yup.object({
     .string("Enter a description")
     .required("Description is required"),
   enddate: yup.date("Enter an EndDate").required("EndDate is required "),
-  campaigngoal: yup
+  campaignGoal: yup
     .number("Enter a CampaignGoal")
     .required("CampaignGoal is required"),
 });
 
 const AddCampaigns = () => {
-  // const history = useNavigate();
+  const history = useNavigate();
 
   const [user, setUser] = useState();
 
@@ -37,27 +37,26 @@ const AddCampaigns = () => {
   }, []);
 
   let startdate = new Date().toISOString().slice(0, 10);
-  let remaining = {
-    startdate: startdate,
-    user: user,
-  };
 
   const formik = useFormik({
     initialValues: {
       title: "",
       description: "",
       enddate: "",
-      campaigngoal: 0,
+      campaignGoal: 0,
     },
     validationSchema: validationSchema,
-    onSubmit: (values) => {
-      values = { ...values, remaining };
+    onSubmit: async (values) => {
+      values.startdate = startdate;
+      values.postedBy = user._id;
+      values.posterName = user.name;
       alert(JSON.stringify(values, null, 2));
       console.log("Values: ", values);
-      // axios
-      //   .post("http://localhost:3001/funderr/SignUp", values)
-      //   .then((response) => console.log(response.data));
-      // history("/login");
+      await axios
+        .post("http://localhost:3001/funderr/newpost", values)
+        .then((response) => console.log(response.data));
+      alert(JSON.stringify("New Campaign Created"));
+      history("/home");
     },
   });
 
@@ -109,17 +108,17 @@ const AddCampaigns = () => {
           />
           <TextField
             fullWidth
-            id="campaigngoal"
-            name="campaigngoal"
+            id="campaignGoal"
+            name="campaignGoal"
             label="Campaign Goal"
             type="number"
-            value={formik.values.campaigngoal}
+            value={formik.values.campaignGoal}
             onChange={formik.handleChange}
             error={
-              formik.touched.campaigngoal && Boolean(formik.errors.campaigngoal)
+              formik.touched.campaignGoal && Boolean(formik.errors.campaignGoal)
             }
             helperText={
-              formik.touched.campaigngoal && formik.errors.campaigngoal
+              formik.touched.campaignGoal && formik.errors.campaignGoal
             }
             style={{ marginTop: "2rem" }}
           />

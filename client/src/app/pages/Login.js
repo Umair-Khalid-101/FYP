@@ -21,7 +21,7 @@ const validationSchema = yup.object({
 
 const Login = () => {
   const dispatch = useDispatch();
-  const history = useNavigate();
+  let navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: {
@@ -37,7 +37,7 @@ const Login = () => {
           console.log(response.data);
         })
         .catch((error) => console.log(error));
-      history("/home");
+      navigate("/home");
     },
   });
 

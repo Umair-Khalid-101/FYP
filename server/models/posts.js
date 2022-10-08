@@ -21,6 +21,10 @@ const postSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  posterName: {
+    type: String,
+    required: true,
+  },
   campaignGoal: {
     type: Number,
     required: true,

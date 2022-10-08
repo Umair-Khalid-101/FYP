@@ -4,8 +4,8 @@ const {
   login,
   verifyToken,
   getUser,
-  refreshToken,
   logout,
+  refreshToken,
 } = require("../controllers/userController");
 const router = express.Router();
 

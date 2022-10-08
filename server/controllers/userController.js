@@ -49,7 +49,7 @@ const login = async (req, res, next) => {
   }
 
   const token = jwt.sign({ id: existingUser._id }, process.env.JWT_SECRET_KEY, {
-    expiresIn: "35s",
+    expiresIn: "7d",
   });
 
   console.log("Generated Token\n", token);
@@ -58,11 +58,17 @@ const login = async (req, res, next) => {
     req.cookies[`${existingUser._id}`] = "";
   }
 
+  // res.cookie(String(existingUser._id), token, {
+  //   path: "/",
+  //   expires: new Date(Date.now() + 1000 * 30),
+  //   httpOnly: true,
+  //   sameSite: "lax",
+  // });
   res.cookie(String(existingUser._id), token, {
-    path: "/",
-    expires: new Date(Date.now() + 1000 * 30),
-    httpOnly: true,
-    sameSite: "lax",
+    httpOnly: true, //accessible only by web server
+    secure: true, //https
+    sameSite: "None", //cross-site cookie
+    maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
   });
 
   return res
@@ -102,6 +108,7 @@ const getUser = async (req, res, next) => {
 
 const refreshToken = (req, res, next) => {
   const cookies = req.headers.cookie;
+  console.log("Token from Cookie: ", cookies);
   const prevToken = cookies.split("=")[1];
   if (!prevToken) {
     return res.status(400).json({ message: "Couldn't find token" });
@@ -115,15 +122,21 @@ const refreshToken = (req, res, next) => {
     req.cookies[`${user.id}`] = "";
 
     const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET_KEY, {
-      expiresIn: "35s",
+      expiresIn: "7d",
     });
     console.log("Regenerated Token\n", token);
 
+    // res.cookie(String(user.id), token, {
+    //   path: "/",
+    //   expires: new Date(Date.now() + 1000 * 30),
+    //   httpOnly: true,
+    //   sameSite: "lax",
+    // });
     res.cookie(String(user.id), token, {
-      path: "/",
-      expires: new Date(Date.now() + 1000 * 30),
-      httpOnly: true,
-      sameSite: "lax",
+      httpOnly: true, //accessible only by web server
+      secure: true, //https
+      sameSite: "None", //cross-site cookie
+      maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
     });
 
     req.id = user.id;

@@ -24,7 +24,7 @@ const Header = () => {
     sendLogoutReq().then(() => dispatch(authActions.logout()));
   };
 
-  const [value, setValue] = useState();
+  const [value, setValue] = useState("1");
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
