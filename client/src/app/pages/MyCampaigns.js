@@ -3,9 +3,15 @@ import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
 import CardComponent from "../components/Card";
+import Fab from "@mui/material/Fab";
+import { useNavigate } from "react-router-dom";
+import HomeIcon from "@mui/icons-material/Home";
+import Grid from "@mui/material/Grid";
+
 axios.defaults.withCredentials = true;
 
 const MyCampaigns = () => {
+  const history = useNavigate();
   const [userCampaigns, setUserCampaigns] = useState();
 
   const getUserCampaigns = async () => {
@@ -35,20 +41,37 @@ const MyCampaigns = () => {
   if (userCampaigns) {
     return (
       <div>
-        <h1>UserPosts</h1>
-        {userCampaigns.map((userpost) => (
-          // <div>
-          //   <div>Title: {userpost.title}</div>
-          //   <div>Description: {userpost.description}</div>
-          //   <div>PostedBy: {userpost.posterName}</div>
-          //   <div>StartDate: {userpost.startdate}</div>
-          //   <div>EndDate: {userpost.enddate}</div>
-          //   <div>CampaignGoal: {userpost.campaignGoal} ETH</div>
-          // </div>
-          <div>
-            <CardComponent posts={userpost} />
-          </div>
-        ))}
+        <div
+          onClick={() => history("/home")}
+          style={{
+            margin: "1rem",
+            display: "flex",
+            flexDirection: "row-reverse",
+          }}
+        >
+          <Fab variant="extended">
+            <HomeIcon sx={{ mr: 1 }} />
+            Home
+          </Fab>
+        </div>
+        <div>
+          <h1
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            My Campaigns
+          </h1>
+          <Grid container spacing={4} paddingLeft={8} paddingBottom={4}>
+            {userCampaigns.map((allposts) => (
+              <Grid item xs={4}>
+                <CardComponent posts={allposts} />
+              </Grid>
+            ))}
+          </Grid>
+        </div>
       </div>
     );
   }

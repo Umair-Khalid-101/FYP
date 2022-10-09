@@ -28,7 +28,7 @@ export default function CardComponent({ posts }) {
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
-            R
+            U
           </Avatar>
         }
         action={
@@ -37,7 +37,7 @@ export default function CardComponent({ posts }) {
           </IconButton>
         }
         title={title}
-        subheader={("By: ", posterName)}
+        subheader={posterName}
       />
       {/* <CardMedia
         component="img"
@@ -47,13 +47,13 @@ export default function CardComponent({ posts }) {
       /> */}
       <CardContent>
         <Typography variant="body2" color="text.secondary">
-          {description}
+          Description: {description}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          StartDate: {startdate}
+          StartDate: {startdate.split("T")[0]}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          EndDate: {enddate}
+          EndDate: {enddate.split("T")[0]}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           CampaignGoal: {campaignGoal}

@@ -7,6 +7,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { authActions } from "../store";
+import { toast, ToastContainer } from "react-toastify";
 
 const validationSchema = yup.object({
   email: yup
@@ -23,6 +24,12 @@ const Login = () => {
   const dispatch = useDispatch();
   let navigate = useNavigate();
 
+  const success = () => {
+    toast.success("Successfully Logged In!", {
+      position: toast.POSITION.TOP_LEFT,
+    });
+  };
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -35,14 +42,25 @@ const Login = () => {
         .then((response) => {
           dispatch(authActions.login());
           console.log(response.data);
+          if (response.data) {
+            success();
+            setTimeout(() => {
+              navigate("/home");
+            }, 3000);
+          }
         })
-        .catch((error) => console.log(error));
-      navigate("/home");
+        .catch((error) => {
+          console.log(error);
+          toast.error("Wrong Email or Password", {
+            position: toast.POSITION.TOP_LEFT,
+          });
+        });
     },
   });
 
   return (
     <>
+      <ToastContainer />
       <div
         style={{
           display: "flex",
@@ -81,6 +99,7 @@ const Login = () => {
             fullWidth
             type="submit"
             style={{ marginTop: "2rem" }}
+            // onClick={handleToast}
           >
             Submit
           </Button>

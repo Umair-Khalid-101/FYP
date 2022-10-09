@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const validationSchema = yup.object({
   title: yup.string("Enter a title").required("Title is required"),
@@ -50,23 +51,30 @@ const AddCampaigns = () => {
       values.startdate = startdate;
       values.postedBy = user._id;
       values.posterName = user.name;
-      alert(JSON.stringify(values, null, 2));
       console.log("Values: ", values);
       await axios
         .post("http://localhost:3001/funderr/newpost", values)
-        .then((response) => console.log(response.data));
-      alert(JSON.stringify("New Campaign Created"));
-      history("/home");
+        .then((response) => {
+          console.log(response.data);
+          toast.success("New Campaign Created!", {
+            position: toast.POSITION.TOP_LEFT,
+          });
+        });
+      // alert(JSON.stringify("New Campaign Created"));
+      setTimeout(() => {
+        history("/home");
+      }, 3000);
     },
   });
 
   return (
     <>
+      <ToastContainer />
       <div
         style={{
           display: "flex",
           justifyContent: "center",
-          alignItems: "centerx",
+          alignItems: "center",
           marginTop: "10rem",
         }}
       >

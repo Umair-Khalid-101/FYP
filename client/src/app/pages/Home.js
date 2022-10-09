@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import Fab from "@mui/material/Fab";
 import AddIcon from "@mui/icons-material/Add";
@@ -9,11 +9,15 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
+import { useQuery } from "react-query";
+import CardComponent from "../components/Card";
+import Grid from "@mui/material/Grid";
 
 axios.defaults.withCredentials = true;
-let firstRender = true;
+// let firstRender = true;
 
 const Home = () => {
+  const history = useNavigate();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -23,41 +27,48 @@ const Home = () => {
     setAnchorEl(null);
   };
 
-  const [user, setUser] = useState();
+  const { isLoading, data } = useQuery("all-posts", () => {
+    return axios.get("http://localhost:3001/funderr/allposts");
+  });
 
-  const history = useNavigate();
+  // console.log("Data: ", data.data.allposts);
 
-  const refreshToken = async () => {
-    const res = await axios
-      .get("http://localhost:3001/funderr/refresh", {
-        withCredentials: true,
-      })
-      .catch((err) => console.log(err));
+  // const [user, setUser] = useState();
+  // const refreshToken = async () => {
+  //   const res = await axios
+  //     .get("http://localhost:3001/funderr/refresh", {
+  //       withCredentials: true,
+  //     })
+  //     .catch((err) => console.log(err));
 
-    const data = await res.data;
-    return data;
-  };
+  //   const data = await res.data;
+  //   return data;
+  // };
 
-  const sendRequest = async () => {
-    const res = await axios
-      .get("http://localhost:3001/funderr/user", {
-        withCredentials: true,
-      })
-      .catch((err) => console.log(err));
-    const data = await res.data;
-    return data;
-  };
+  // const sendRequest = async () => {
+  //   const res = await axios
+  //     .get("http://localhost:3001/funderr/user", {
+  //       withCredentials: true,
+  //     })
+  //     .catch((err) => console.log(err));
+  //   const data = await res.data;
+  //   return data;
+  // };
 
-  useEffect(() => {
-    if (firstRender) {
-      firstRender = false;
-      sendRequest().then((data) => setUser(data.user));
-    }
-    let interval = setInterval(() => {
-      refreshToken().then((data) => setUser(data.user));
-    }, 1000 * 28);
-    return () => clearInterval(interval);
-  }, []);
+  // useEffect(() => {
+  //   if (firstRender) {
+  //     firstRender = false;
+  //     sendRequest().then((data) => setUser(data.user));
+  //   }
+  //   let interval = setInterval(() => {
+  //     refreshToken().then((data) => setUser(data.user));
+  //   }, 1000 * 28);
+  //   return () => clearInterval(interval);
+  // }, []);
+
+  if (isLoading) {
+    return <h2>Loading...</h2>;
+  }
 
   return (
     <>
@@ -83,7 +94,7 @@ const Home = () => {
               mr: "0.3rem",
             }}
           >
-            <Tooltip title="Account settings">
+            <Tooltip title="Account">
               <IconButton
                 onClick={handleClick}
                 size="large"
@@ -140,8 +151,24 @@ const Home = () => {
           </Menu>
         </div>
       </div>
-      <div>{user && <h1>{user.name}</h1>}</div>
-      <div>Card</div>
+      <div>
+        <h1
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          All Campaigns
+        </h1>
+        <Grid container spacing={4} paddingLeft={8} paddingBottom={4}>
+          {data.data.allposts.map((allposts) => (
+            <Grid item xs={4}>
+              <CardComponent posts={allposts} />
+            </Grid>
+          ))}
+        </Grid>
+      </div>
     </>
   );
 };
