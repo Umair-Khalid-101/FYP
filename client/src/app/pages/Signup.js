@@ -5,6 +5,7 @@ import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast, ToastContainer } from "react-toastify";
 
 const validationSchema = yup.object({
   name: yup.string("Enter your name").required("Name is required"),
@@ -37,13 +38,21 @@ const SignUp = () => {
       console.log("Values: ", values);
       axios
         .post("http://localhost:3001/funderr/SignUp", values)
-        .then((response) => console.log(response.data));
-      history("/login");
+        .then((response) => console.log(response.data))
+        .then(
+          toast.success("Signed Up Successfully!", {
+            position: toast.POSITION.TOP_LEFT,
+          })
+        );
+      setTimeout(() => {
+        history("/login");
+      }, 3000);
     },
   });
 
   return (
     <>
+      <ToastContainer />
       <div
         style={{
           display: "flex",

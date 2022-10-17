@@ -11,6 +11,9 @@ import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
 import MoreVertIcon from "@mui/icons-material/MoreVert";
+import Button from "@mui/material/Button";
+import Stack from "@mui/material/Stack";
+import PaidIcon from "@mui/icons-material/Paid";
 
 export default function CardComponent({ posts }) {
   const {
@@ -67,6 +70,15 @@ export default function CardComponent({ posts }) {
           <ShareIcon />
         </IconButton>
       </CardActions>{" "}
+      <Stack direction="row" spacing={2} paddingLeft={14} paddingBottom={2}>
+        <Button
+          variant="contained"
+          endIcon={<PaidIcon />}
+          onClick={() => alert(posts._id)}
+        >
+          Donate
+        </Button>
+      </Stack>
     </Card>
   );
 }

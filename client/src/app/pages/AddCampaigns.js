@@ -6,6 +6,7 @@ import TextField from "@mui/material/TextField";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { toast, ToastContainer } from "react-toastify";
+axios.defaults.withCredentials = true;
 
 const validationSchema = yup.object({
   title: yup.string("Enter a title").required("Title is required"),

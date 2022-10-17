@@ -64,11 +64,13 @@ const login = async (req, res, next) => {
   //   httpOnly: true,
   //   sameSite: "lax",
   // });
+
   res.cookie(String(existingUser._id), token, {
     httpOnly: true, //accessible only by web server
-    secure: true, //https
-    sameSite: "None", //cross-site cookie
+    sameSite: "lax", //cross-site cookie
     maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
+    expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+    path: "/",
   });
 
   return res
@@ -79,6 +81,7 @@ const login = async (req, res, next) => {
 const verifyToken = (req, res, next) => {
   const cookies = req.headers.cookie;
   const token = cookies.split("=")[1];
+  console.log("verifyToken: ", token);
   if (!token) {
     res.status(404).json({ message: "No token found" });
   }
@@ -134,9 +137,10 @@ const refreshToken = (req, res, next) => {
     // });
     res.cookie(String(user.id), token, {
       httpOnly: true, //accessible only by web server
-      secure: true, //https
-      sameSite: "None", //cross-site cookie
+      sameSite: "lax", //cross-site cookie
       maxAge: 7 * 24 * 60 * 60 * 1000, //cookie expiry: set to match rT
+      expires: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000),
+      path: "/",
     });
 
     req.id = user.id;

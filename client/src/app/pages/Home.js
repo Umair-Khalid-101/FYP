@@ -145,7 +145,7 @@ const Home = () => {
             <MenuItem onClick={() => history("/Profile")}>
               <Avatar /> My Profile
             </MenuItem>
-            <MenuItem onClick={() => history("/MyCampaigns")}>
+            <MenuItem onClick={() => history("/myCampaigns")}>
               <Avatar /> My Campaigns
             </MenuItem>
           </Menu>

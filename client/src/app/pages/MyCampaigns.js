@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import Box from "@mui/material/Box";
-import CardComponent from "../components/Card";
+import CardComponent from "../components/MyCampaignCard";
 import Fab from "@mui/material/Fab";
 import { useNavigate } from "react-router-dom";
 import HomeIcon from "@mui/icons-material/Home";
@@ -68,6 +68,19 @@ const MyCampaigns = () => {
             {userCampaigns.map((allposts) => (
               <Grid item xs={4}>
                 <CardComponent posts={allposts} />
+                {/* <Stack
+                  direction="row"
+                  spacing={2}
+                  paddingLeft={8}
+                  paddingTop={2}
+                >
+                  <Button variant="contained" endIcon={<UpdateIcon />}>
+                    Update
+                  </Button>
+                  <Button variant="outlined" startIcon={<DeleteIcon />}>
+                    Delete
+                  </Button>
+                </Stack> */}
               </Grid>
             ))}
           </Grid>
