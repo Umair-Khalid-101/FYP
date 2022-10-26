@@ -8,20 +8,19 @@ axios.defaults.withCredentials = true;
 
 const Profile = () => {
   const history = useNavigate();
-
   const [user, setUser] = useState();
   const sendRequest = async () => {
     const res = await axios
-      .get("http://localhost:3001/funderr/user", {
-        withCredentials: true,
-      })
+      .get("http://localhost:3001/funderr/user")
       .catch((err) => console.log(err));
     const data = await res.data;
     return data;
   };
 
   useEffect(() => {
-    sendRequest().then((data) => setUser(data.user));
+    sendRequest().then((data) => {
+      setUser(data.user);
+    });
   }, []);
 
   return (

@@ -163,7 +163,7 @@ const Home = () => {
         </h1>
         <Grid container spacing={4} paddingLeft={8} paddingBottom={4}>
           {data.data.allposts.map((allposts) => (
-            <Grid item xs={4}>
+            <Grid item xs={4} key={Math.random()}>
               <CardComponent posts={allposts} />
             </Grid>
           ))}

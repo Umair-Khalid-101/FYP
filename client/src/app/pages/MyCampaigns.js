@@ -66,21 +66,8 @@ const MyCampaigns = () => {
           </h1>
           <Grid container spacing={4} paddingLeft={8} paddingBottom={4}>
             {userCampaigns.map((allposts) => (
-              <Grid item xs={4}>
+              <Grid item xs={4} key={Math.random()}>
                 <CardComponent posts={allposts} />
-                {/* <Stack
-                  direction="row"
-                  spacing={2}
-                  paddingLeft={8}
-                  paddingTop={2}
-                >
-                  <Button variant="contained" endIcon={<UpdateIcon />}>
-                    Update
-                  </Button>
-                  <Button variant="outlined" startIcon={<DeleteIcon />}>
-                    Delete
-                  </Button>
-                </Stack> */}
               </Grid>
             ))}
           </Grid>

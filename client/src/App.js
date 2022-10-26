@@ -10,8 +10,11 @@ import Profile from "./app/pages/Profile";
 import MyCampaigns from "./app/pages/MyCampaigns";
 import EditCampaigns from "./app/pages/EditCampaigns";
 import EtherScan from "./app/pages/EtherScan";
+import { userContext } from "./app/context/userContext";
+import { useState } from "react";
 
 function App() {
+  const [value, setValue] = useState(null);
   const isLoggedIn = useSelector((state) => state.isLoggedIn);
   console.log(isLoggedIn);
   return (
@@ -20,17 +23,19 @@ function App() {
         <Header />
       </header>
       <main>
-        <Routes>
-          {isLoggedIn && <Route path="/home" element={<Home />} />}
-          <Route path="/etherscan" element={<EtherScan />} />
-          <Route path="/editCampaign/:id" element={<EditCampaigns />} />
-          <Route path="/myCampaigns" element={<MyCampaigns />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/addCampaigns" element={<AddCampaigns />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/" element={<LandingPage />} />
-        </Routes>
+        <userContext.Provider value={{ value, setValue }}>
+          <Routes>
+            <Route path="/home" element={<Home />} />
+            <Route path="/etherscan" element={<EtherScan />} />
+            <Route path="/editCampaign/:id" element={<EditCampaigns />} />
+            <Route path="/myCampaigns" element={<MyCampaigns />} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/addCampaigns" element={<AddCampaigns />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/" element={<LandingPage />} />
+          </Routes>
+        </userContext.Provider>
       </main>
     </>
   );
