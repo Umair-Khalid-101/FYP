@@ -1,11 +1,12 @@
 const dotenv = require("dotenv");
 dotenv.config();
+const _ = require("lodash");
 const User = require("../models/userSignUpModel");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const signup = async (req, res, next) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, role } = req.body;
   let existingUser;
   try {
     existingUser = await User.findOne({ email: email });
@@ -22,6 +23,7 @@ const signup = async (req, res, next) => {
     name,
     email,
     password: hashedPassword,
+    role,
   });
 
   try {
@@ -165,9 +167,44 @@ const logout = (req, res, next) => {
   });
 };
 
+const register = async (req, res, next) => {
+  let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).send("User Already Registered.");
+
+  user = new User(_.pick(req.body, ["name", "email", "password", "role"]));
+  const salt = await bcrypt.genSalt(10);
+  user.password = await bcrypt.hash(user.password, salt);
+
+  await user.save();
+
+  const token = user.generateAuthToken();
+  res
+    .header("x-auth-token", token)
+    .send(_.pick(user, ["_id", " name", "email", "role"]));
+};
+
+const auth = async (req, res, next) => {
+  let user = await User.findOne({ email: req.body.email });
+  if (!user) return res.status(400).send("Invalid Email or Password");
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword) return res.status(400).send("Invalid Email or Password");
+
+  const token = user.generateAuthToken();
+  res.send(token);
+};
+
+const currentUser = async (req, res, next) => {
+  const user = await User.findById(req.user._id).select("-password");
+  res.send(user);
+};
+
 exports.signup = signup;
 exports.login = login;
 exports.verifyToken = verifyToken;
 exports.getUser = getUser;
 exports.refreshToken = refreshToken;
 exports.logout = logout;
+exports.register = register;
+exports.auth = auth;
+exports.currentUser = currentUser;

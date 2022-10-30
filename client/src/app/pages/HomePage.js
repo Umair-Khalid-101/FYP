@@ -1,32 +1,27 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import AddCampaignForm from "../components/AddCampaignForm";
+import AdminDashboard from "./AdminDashboard";
+import Home from "./Home";
 axios.defaults.withCredentials = true;
-
-const AddCampaigns = () => {
-  const [user, setUser] = useState();
+const HomePage = () => {
+  const [user, setUser] = useState(null);
 
   const sendRequest = async () => {
     const res = await axios
-      .get("http://localhost:3001/funderr/user", {
-        withCredentials: true,
-      })
+      .get("http://localhost:3001/funderr/user")
       .catch((err) => console.log(err));
     const data = await res.data;
     return data;
   };
-
   useEffect(() => {
     sendRequest().then((data) => setUser(data.user));
   }, []);
 
+  console.log("User: ", user);
+
   return (
-    <>
-      <div>
-        {user ? <AddCampaignForm user={user} /> : <div>LOADINGG....</div>}
-      </div>
-    </>
+    <div>{/* {user.role === "admin" ? <AdminDashboard /> : <Home />} */}</div>
   );
 };
 
-export default AddCampaigns;
+export default HomePage;

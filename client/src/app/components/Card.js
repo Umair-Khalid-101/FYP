@@ -14,8 +14,10 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 import Button from "@mui/material/Button";
 import Stack from "@mui/material/Stack";
 import PaidIcon from "@mui/icons-material/Paid";
+import { useNavigate } from "react-router-dom";
 
 export default function CardComponent({ posts }) {
+  const history = useNavigate();
   const {
     title,
     description,
@@ -74,7 +76,7 @@ export default function CardComponent({ posts }) {
         <Button
           variant="contained"
           endIcon={<PaidIcon />}
-          onClick={() => alert(posts._id)}
+          onClick={() => history(`/donate/${posts._id}`)}
         >
           Donate
         </Button>

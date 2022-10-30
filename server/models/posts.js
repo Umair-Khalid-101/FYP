@@ -29,6 +29,14 @@ const postSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  walletAddress: {
+    type: String,
+    required: true,
+  },
+  permission: {
+    type: String,
+    required: true,
+  },
 });
 
 module.exports = mongoose.model("Post", postSchema);

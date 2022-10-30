@@ -10,6 +10,9 @@ import Profile from "./app/pages/Profile";
 import MyCampaigns from "./app/pages/MyCampaigns";
 import EditCampaigns from "./app/pages/EditCampaigns";
 import EtherScan from "./app/pages/EtherScan";
+import DonatePage from "./app/pages/DonatePage";
+import HomePage from "./app/pages/HomePage";
+import AdminDashboard from "./app/pages/AdminDashboard";
 import { userContext } from "./app/context/userContext";
 import { useState } from "react";
 
@@ -25,7 +28,10 @@ function App() {
       <main>
         <userContext.Provider value={{ value, setValue }}>
           <Routes>
+            <Route path="/donate/:id" element={<DonatePage />} />
             <Route path="/home" element={<Home />} />
+            <Route path="/homepage" element={<HomePage />} />
+            <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/etherscan" element={<EtherScan />} />
             <Route path="/editCampaign/:id" element={<EditCampaigns />} />
             <Route path="/myCampaigns" element={<MyCampaigns />} />

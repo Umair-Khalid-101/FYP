@@ -9,6 +9,8 @@ const addPost = async (req, res, next) => {
     startdate,
     campaignGoal,
     posterName,
+    walletAddress,
+    permission,
   } = req.body;
   const post = new posts({
     title,
@@ -18,6 +20,8 @@ const addPost = async (req, res, next) => {
     startdate,
     campaignGoal,
     posterName,
+    walletAddress,
+    permission,
   });
   try {
     await post.save();
@@ -91,9 +95,22 @@ const postById = async (req, res, next) => {
   return res.status(200).json({ newpost });
 };
 
+const pendingPosts = async (req, res, next) => {
+  try {
+    pending = await posts.find({ permission: "pending" });
+  } catch (error) {
+    console.log(error);
+  }
+  if (!pending) {
+    return res.status(400).json({ message: "No Pending Posts" });
+  }
+  return res.status(200).json({ pending });
+};
+
 exports.addPost = addPost;
 exports.getPosts = getPosts;
 exports.getUserPosts = getUserPosts;
 exports.updatePost = updatePost;
 exports.deletePost = deletePost;
 exports.postById = postById;
+exports.pendingPosts = pendingPosts;
